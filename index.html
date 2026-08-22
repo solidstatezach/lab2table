@@ -576,43 +576,79 @@ function closeCheckout(){
   document.getElementById("checkoutModal").classList.remove("show");
 }
 
-function submitOrder(event){
+async function submitOrder(event){
   event.preventDefault();
-
-  /*
-    This is intentionally an ORDER REQUEST only.
-    The next backend step will send the submitted order
-    securely to the owner's email.
-  */
 
   const form = document.getElementById("orderForm");
   const data = new FormData(form);
+  const status = document.getElementById("orderStatus");
+
+  const items = cart.map(item => {
+    const p = productByName(item.name);
+    const tier = p.tiers[item.tierIndex];
+
+    return {
+      name: p.name,
+      tier: tier[0],
+      price: Number(tier[2]),
+      qty: Number(item.qty)
+    };
+  });
 
   const order = {
-    customer:{
-      name:data.get("name"),
-      address1:data.get("address1"),
-      address2:data.get("address2"),
-      city:data.get("city"),
-      state:data.get("state"),
-      zip:data.get("zip"),
-      phone:data.get("phone"),
-      email:data.get("email")
+    customer: {
+      name: data.get("name"),
+      address1: data.get("address1"),
+      address2: data.get("address2"),
+      city: data.get("city"),
+      state: data.get("state"),
+      zip: data.get("zip"),
+      phone: data.get("phone"),
+      email: data.get("email")
     },
-    items:cart,
-    promo:activePromo,
-    total:cartSubtotal()-discountAmount()
+    items,
+    promo: activePromo,
+    total: Number(cartSubtotal() - discountAmount())
   };
 
-  console.log("LAB2TABLE ORDER REQUEST",order);
+  status.innerHTML = "Sending order…";
 
-  document.getElementById("orderStatus").innerHTML =
-    `<div class="success">
-      ✓ Order request prepared successfully.<br><br>
-      We'll review the order and contact you to confirm delivery.
-    </div>`;
+  try {
+    const response = await fetch("/api/order", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(order)
+    });
 
-  form.querySelectorAll("input").forEach(x=>x.disabled=true);
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || "Order could not be submitted.");
+    }
+
+    status.innerHTML =
+      `<div class="success">
+        ✓ Order received!<br><br>
+        We'll review your order and contact you to confirm delivery.
+      </div>`;
+
+    cart = [];
+    activePromo = null;
+    updateCart();
+
+    form.reset();
+
+  } catch(error) {
+    console.error(error);
+
+    status.innerHTML =
+      `<div class="error">
+        We couldn't submit the order right now.
+        Please try again.
+      </div>`;
+  }
 }
 
 render();
