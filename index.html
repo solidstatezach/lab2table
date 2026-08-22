@@ -51,6 +51,81 @@ h2{font-size:28px;margin:8px 0 4px}
 footer{background:#111;color:white;padding:60px 20px}
 .footerInner{max-width:1100px;margin:auto}
 @media(max-width:700px){.grid{grid-template-columns:1fr}.visual{height:280px}h1{letter-spacing:-4px}}
+
+.cartOverlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#0009;
+  z-index:200;
+  justify-content:flex-end;
+}
+.cartOverlay.show{display:flex}
+.cartPanel{
+  background:#f4f1e9;
+  width:min(520px,100%);
+  height:100%;
+  padding:28px;
+  overflow:auto;
+  box-shadow:-10px 0 40px #0003;
+}
+.cartPanel h2{margin-top:8px}
+.cartItem{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  padding:18px 0;
+  border-bottom:1px solid #ddd;
+}
+.cartItemName{font-weight:900}
+.cartItemMeta{font-size:11px;color:#777;margin-top:4px}
+.qty{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.qty button{
+  width:30px;height:30px;border:0;border-radius:50%;
+  background:#111;color:white;cursor:pointer;
+}
+.qty span{min-width:20px;text-align:center;font-weight:900}
+.promo{margin-top:22px;padding:18px;background:#fff;border-radius:18px}
+.totals{margin-top:20px}
+.totals>div{
+  display:flex;justify-content:space-between;padding:8px 0;color:#666;
+}
+.totals .total{
+  border-top:1px solid #ddd;margin-top:8px;padding-top:16px;
+  font-size:20px;color:#111;
+}
+.checkoutBtn{width:100%;margin-top:18px}
+#orderForm label{
+  display:block;font-size:9px;letter-spacing:2px;font-weight:900;
+  margin:15px 0 6px;
+}
+#orderForm input{
+  width:100%;padding:14px;border:1px solid #d8d5cd;
+  border-radius:12px;background:white;font-size:15px;
+}
+.formGrid{
+  display:grid;grid-template-columns:1fr .55fr .8fr;gap:8px;
+}
+.checkoutSummary{
+  margin-top:22px;padding:18px;background:white;border-radius:18px;
+}
+.success{
+  margin-top:15px;padding:15px;border-radius:14px;
+  background:#e8f3e8;color:#245b2a;font-weight:800;
+}
+.error{
+  margin-top:15px;padding:15px;border-radius:14px;
+  background:#f7e5e5;color:#7a2222;font-weight:800;
+}
+@media(max-width:600px){
+  .cartPanel{padding:22px}
+  .formGrid{grid-template-columns:1fr 1fr}
+  .formGrid>div:last-child{grid-column:span 2}
+}
 </style>
 </head>
 <body>
@@ -61,7 +136,7 @@ footer{background:#111;color:white;padding:60px 20px}
 <div class="logo">LAB<sup>2</sup>TABLE</div>
 <div class="tag">PRECISION OVER HYPE</div>
 </div>
-<button class="btn" onclick="document.getElementById('collection').scrollIntoView({behavior:'smooth'})">SHOP</button>
+<button class="btn" onclick="openCart()">🛒 CART <span id="cartCount">0</span></button>
 </div>
 </header>
 
@@ -87,6 +162,96 @@ footer{background:#111;color:white;padding:60px 20px}
 <h2 id="heading">Shop Lab²Table</h2>
 <div class="grid" id="grid"></div>
 </section>
+
+
+<div id="cartDrawer" class="cartOverlay" onclick="if(event.target===this)closeCart()">
+  <div class="cartPanel">
+    <button class="close" onclick="closeCart()">×</button>
+    <div class="eyebrow">YOUR ORDER</div>
+    <h2>Shopping Cart</h2>
+
+    <div id="cartItems"></div>
+
+    <div id="emptyCart" style="padding:25px 0;color:#777">
+      Your cart is empty.
+    </div>
+
+    <div id="cartCheckout" style="display:none">
+      <div class="promo">
+        <div class="eyebrow">PROMO CODE</div>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <input id="promoInput" placeholder="Enter code"
+            style="flex:1;padding:13px;border:1px solid #ddd;border-radius:25px;background:white">
+          <button class="btn" onclick="applyPromo()">APPLY</button>
+        </div>
+        <div id="promoMessage" style="font-size:11px;margin-top:8px"></div>
+      </div>
+
+      <div class="totals">
+        <div><span>Subtotal</span><strong id="subtotal">$0.00</strong></div>
+        <div><span>Discount</span><strong id="discount">$0.00</strong></div>
+        <div class="total"><span>TOTAL</span><strong id="total">$0.00</strong></div>
+      </div>
+
+      <button class="btn checkoutBtn" onclick="openCheckout()">
+        CHECKOUT →
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="checkoutModal" class="modal">
+  <div class="modalBox">
+    <button class="close" onclick="closeCheckout()">×</button>
+
+    <div class="eyebrow">DELIVERY ORDER</div>
+    <h2>Complete Your Order</h2>
+    <p class="detail">
+      Enter your delivery information. This submits an order request for
+      confirmation; no payment is collected on this page.
+    </p>
+
+    <form id="orderForm" onsubmit="submitOrder(event)">
+      <label>FULL NAME *</label>
+      <input required name="name" placeholder="Your full name">
+
+      <label>ADDRESS LINE 1 *</label>
+      <input required name="address1" placeholder="Street address">
+
+      <label>ADDRESS LINE 2</label>
+      <input name="address2" placeholder="Apartment, suite, unit, etc.">
+
+      <div class="formGrid">
+        <div>
+          <label>CITY *</label>
+          <input required name="city" placeholder="City">
+        </div>
+        <div>
+          <label>STATE *</label>
+          <input required name="state" maxlength="2" placeholder="CA">
+        </div>
+        <div>
+          <label>ZIP *</label>
+          <input required name="zip" inputmode="numeric" placeholder="ZIP">
+        </div>
+      </div>
+
+      <label>PHONE *</label>
+      <input required name="phone" type="tel" placeholder="Phone number">
+
+      <label>EMAIL *</label>
+      <input required name="email" type="email" placeholder="Email address">
+
+      <div id="checkoutSummary" class="checkoutSummary"></div>
+
+      <button class="btn checkoutBtn" type="submit">
+        SUBMIT ORDER REQUEST
+      </button>
+
+      <div id="orderStatus"></div>
+    </form>
+  </div>
+</div>
 
 <footer>
 <div class="footerInner">
@@ -237,6 +402,224 @@ function hideModal(){document.getElementById("modal").classList.remove("show")}
 function closeModal(e){if(e.target.id==="modal")hideModal()}
 
 render();
+
+let cart = [];
+let activePromo = null;
+
+const PROMOS = {
+  LAUNCH10: 0.10,
+  WELCOME15: 0.15
+};
+
+function productByName(name){
+  return products.find(p => p.name === name);
+}
+
+function addToCart(pi){
+  const product = products[pi];
+  const tier = product.tiers[0];
+
+  const existing = cart.find(x =>
+    x.name === product.name && x.tierIndex === 0
+  );
+
+  if(existing){
+    existing.qty++;
+  }else{
+    cart.push({
+      name: product.name,
+      tierIndex: 0,
+      qty: 1
+    });
+  }
+
+  updateCart();
+  openCart();
+}
+
+function changeCartTier(name, tierIndex){
+  const item = cart.find(x => x.name === name);
+  if(item){
+    item.tierIndex = Number(tierIndex);
+    updateCart();
+  }
+}
+
+function changeQty(index, amount){
+  cart[index].qty += amount;
+  if(cart[index].qty <= 0) cart.splice(index,1);
+  updateCart();
+}
+
+function cartSubtotal(){
+  return cart.reduce((sum,item)=>{
+    const p = productByName(item.name);
+    return sum + p.tiers[item.tierIndex][2] * item.qty;
+  },0);
+}
+
+function discountAmount(){
+  return activePromo ? cartSubtotal() * PROMOS[activePromo] : 0;
+}
+
+function updateCart(){
+  const items = document.getElementById("cartItems");
+  const empty = document.getElementById("emptyCart");
+  const checkout = document.getElementById("cartCheckout");
+  const count = cart.reduce((n,x)=>n+x.qty,0);
+
+  document.getElementById("cartCount").textContent = count;
+
+  if(!cart.length){
+    items.innerHTML="";
+    empty.style.display="block";
+    checkout.style.display="none";
+    return;
+  }
+
+  empty.style.display="none";
+  checkout.style.display="block";
+
+  items.innerHTML = cart.map((item,index)=>{
+    const p = productByName(item.name);
+    const tier = p.tiers[item.tierIndex];
+
+    const options = p.tiers.map((t,i)=>
+      `<option value="${i}" ${i===item.tierIndex?"selected":""}>${t[0]} — ${money(t[2])}</option>`
+    ).join("");
+
+    return `
+      <div class="cartItem">
+        <div style="flex:1">
+          <div class="cartItemName">${p.emoji} ${p.name}</div>
+          <div class="cartItemMeta">${tier[0]} · ${money(tier[2])}</div>
+          <select onchange="changeCartTier('${p.name.replace(/'/g,"\\'")}',this.value)"
+            style="margin-top:8px;padding:8px;border:1px solid #ddd;border-radius:10px">
+            ${options}
+          </select>
+        </div>
+        <div>
+          <div class="qty">
+            <button onclick="changeQty(${index},-1)">−</button>
+            <span>${item.qty}</span>
+            <button onclick="changeQty(${index},1)">+</button>
+          </div>
+          <div style="font-weight:900;text-align:right;margin-top:8px">
+            ${money(tier[2]*item.qty)}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  const subtotal = cartSubtotal();
+  const discount = discountAmount();
+
+  document.getElementById("subtotal").textContent = money(subtotal);
+  document.getElementById("discount").textContent =
+    discount ? "-"+money(discount) : money(0);
+  document.getElementById("total").textContent = money(subtotal-discount);
+}
+
+function applyPromo(){
+  const input = document.getElementById("promoInput");
+  const code = input.value.trim().toUpperCase();
+  const msg = document.getElementById("promoMessage");
+
+  if(PROMOS[code]){
+    activePromo = code;
+    msg.textContent = "✓ "+code+" applied.";
+    msg.style.color="#245b2a";
+  }else{
+    activePromo = null;
+    msg.textContent = "Promo code not recognized.";
+    msg.style.color="#7a2222";
+  }
+
+  updateCart();
+}
+
+function openCart(){
+  updateCart();
+  document.getElementById("cartDrawer").classList.add("show");
+}
+
+function closeCart(){
+  document.getElementById("cartDrawer").classList.remove("show");
+}
+
+function openCheckout(){
+  if(!cart.length) return;
+
+  const summary = cart.map(item=>{
+    const p = productByName(item.name);
+    const t = p.tiers[item.tierIndex];
+    return `<div style="display:flex;justify-content:space-between;padding:5px 0">
+      <span>${item.qty} × ${p.name} — ${t[0]}</span>
+      <strong>${money(t[2]*item.qty)}</strong>
+    </div>`;
+  }).join("");
+
+  document.getElementById("checkoutSummary").innerHTML =
+    summary +
+    `<hr style="border:0;border-top:1px solid #ddd;margin:12px 0">
+     <div style="display:flex;justify-content:space-between">
+       <strong>TOTAL</strong>
+       <strong>${money(cartSubtotal()-discountAmount())}</strong>
+     </div>`;
+
+  document.getElementById("checkoutModal").classList.add("show");
+  closeCart();
+}
+
+function closeCheckout(){
+  document.getElementById("checkoutModal").classList.remove("show");
+}
+
+function submitOrder(event){
+  event.preventDefault();
+
+  /*
+    This is intentionally an ORDER REQUEST only.
+    The next backend step will send the submitted order
+    securely to the owner's email.
+  */
+
+  const form = document.getElementById("orderForm");
+  const data = new FormData(form);
+
+  const order = {
+    customer:{
+      name:data.get("name"),
+      address1:data.get("address1"),
+      address2:data.get("address2"),
+      city:data.get("city"),
+      state:data.get("state"),
+      zip:data.get("zip"),
+      phone:data.get("phone"),
+      email:data.get("email")
+    },
+    items:cart,
+    promo:activePromo,
+    total:cartSubtotal()-discountAmount()
+  };
+
+  console.log("LAB2TABLE ORDER REQUEST",order);
+
+  document.getElementById("orderStatus").innerHTML =
+    `<div class="success">
+      ✓ Order request prepared successfully.<br><br>
+      We'll review the order and contact you to confirm delivery.
+    </div>`;
+
+  form.querySelectorAll("input").forEach(x=>x.disabled=true);
+}
+
+render();
+
+document.querySelectorAll(".add").forEach((button,index)=>{
+  button.onclick = () => addToCart(index);
+});
 </script>
 </body>
 </html>
