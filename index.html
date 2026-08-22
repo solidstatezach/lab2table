@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lab²Table — Supplements</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f4f1e9;color:#111;font-family:Arial,Helvetica,sans-serif}
+header{position:sticky;top:0;z-index:10;background:rgba(244,241,233,.94);backdrop-filter:blur(15px);border-bottom:1px solid #ddd}
+.nav{max-width:1100px;margin:auto;padding:18px 20px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-weight:900;font-size:22px;letter-spacing:-1px}
+.logo sup{font-size:10px}
+.tag{font-size:8px;letter-spacing:3px;color:#777;margin-top:4px}
+.btn{border:0;border-radius:30px;padding:13px 22px;background:#111;color:white;font-weight:800;cursor:pointer}
+.hero{max-width:1100px;margin:auto;padding:75px 20px}
+.eyebrow{text-transform:uppercase;letter-spacing:4px;font-size:10px;font-weight:900;color:#777}
+h1{font-size:clamp(55px,10vw,105px);line-height:.86;letter-spacing:-6px;margin:22px 0}
+.hero p{max-width:600px;color:#666;font-size:18px;line-height:1.6}
+.categories{background:white;border-top:1px solid #ddd;border-bottom:1px solid #ddd}
+.catbar{max-width:1100px;margin:auto;padding:20px;display:flex;gap:8px;overflow:auto}
+.cat{border:0;border-radius:30px;padding:12px 20px;background:#f0eee7;font-weight:800;white-space:nowrap;cursor:pointer}
+.cat.active{background:#111;color:white}
+.products{max-width:1100px;margin:auto;padding:70px 20px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:25px}
+.card{background:white;border-radius:28px;overflow:hidden;box-shadow:0 8px 30px #0000000b}
+.visual{height:330px;background:#111;color:white;display:flex;align-items:center;justify-content:center;position:relative}
+.visual .emoji{font-size:75px}
+.visual .brand{position:absolute;top:22px;left:24px;font-size:9px;letter-spacing:3px;color:#777}
+.info{padding:25px}
+.category{font-size:9px;text-transform:uppercase;letter-spacing:3px;color:#888;font-weight:900}
+h2{font-size:28px;margin:8px 0 4px}
+.subtitle{color:#777}
+.priceRow{display:flex;justify-content:space-between;align-items:end;margin-top:22px}
+.price{font-size:30px;font-weight:900}
+.per{font-size:10px;color:#888}
+.sliderBox{background:#f0eee7;border-radius:18px;padding:18px;margin-top:22px}
+.slider{width:100%;accent-color:#111}
+.tier{text-align:center;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:1px;margin-top:8px}
+.servings{text-align:center;font-size:24px;font-weight:900;margin-top:12px}
+.save{text-align:center;color:#777;font-size:11px;margin-top:5px}
+.actions{display:flex;gap:8px;margin-top:18px}
+.view{flex:1;border:1px solid #ddd;background:white;border-radius:30px;padding:14px;font-weight:900;cursor:pointer}
+.add{border:0;background:#111;color:white;border-radius:30px;width:52px;font-size:22px;cursor:pointer}
+.modal{display:none;position:fixed;inset:0;background:#000b;z-index:100;align-items:end;justify-content:center;padding:15px}
+.modal.show{display:flex}
+.modalBox{background:#f4f1e9;border-radius:28px 28px 0 0;max-width:700px;width:100%;padding:28px;max-height:90vh;overflow:auto}
+.close{float:right;border:0;background:#ddd;border-radius:50%;width:38px;height:38px;font-size:20px;cursor:pointer}
+.modal h2{font-size:40px}
+.detail{color:#666;line-height:1.7}
+footer{background:#111;color:white;padding:60px 20px}
+.footerInner{max-width:1100px;margin:auto}
+@media(max-width:700px){.grid{grid-template-columns:1fr}.visual{height:280px}h1{letter-spacing:-4px}}
+</style>
+</head>
+<body>
+
+<header>
+<div class="nav">
+<div>
+<div class="logo">LAB<sup>2</sup>TABLE</div>
+<div class="tag">PRECISION OVER HYPE</div>
+</div>
+<button class="btn" onclick="document.getElementById('collection').scrollIntoView({behavior:'smooth'})">SHOP</button>
+</div>
+</header>
+
+<section class="hero">
+<div class="eyebrow">LAB → FORMULA → TABLE</div>
+<h1>Supplements<br>with a<br>point.</h1>
+<p>Explore the Lab²Table collection. Choose your product, slide to your supply, and make it yours.</p>
+<button class="btn" onclick="document.getElementById('collection').scrollIntoView({behavior:'smooth'})">EXPLORE COLLECTION ↓</button>
+</section>
+
+<div class="categories">
+<div class="catbar">
+<button class="cat active" onclick="filter('All',this)">◈ ALL</button>
+<button class="cat" onclick="filter('Hot New Products',this)">🔥 HOT NEW PRODUCTS</button>
+<button class="cat" onclick="filter('Energy',this)">⚡ ENERGY</button>
+<button class="cat" onclick="filter('Focus',this)">🧠 FOCUS</button>
+<button class="cat" onclick="filter('Wellness',this)">✦ WELLNESS</button>
+</div>
+</div>
+
+<section class="products" id="collection">
+<div class="eyebrow">THE COLLECTION</div>
+<h2 id="heading">Shop Lab²Table</h2>
+<div class="grid" id="grid"></div>
+</section>
+
+<footer>
+<div class="footerInner">
+<div class="logo">LAB<sup>2</sup>TABLE</div>
+<p style="color:#777">Precision over hype.</p>
+</div>
+</footer>
+
+<div class="modal" id="modal" onclick="closeModal(event)">
+<div class="modalBox">
+<button class="close" onclick="hideModal()">×</button>
+<div class="eyebrow" id="modalCat"></div>
+<h2 id="modalName"></h2>
+<p class="detail" id="modalText"></p>
+<hr style="border:0;border-top:1px solid #ddd;margin:25px 0">
+<div class="eyebrow">PRODUCT INFORMATION</div>
+<p class="detail">Supplement Facts, ingredients, directions, flavor information and final formulation details can be added here when finalized.</p>
+<button class="btn" style="width:100%;margin-top:15px">ADD TO CART</button>
+</div>
+</div>
+
+<script>
+const products=[
+{
+name:"Molly's Dancing Shoes",cat:"Hot New Products",emoji:"💃",
+tag:"Find your rhythm.",
+tiers:[
+["Single Serve",1,75],
+["Trial Pack",3,220],
+["10 Servings",10,700],
+["Daily Supply",30,2025]]
+},
+{
+name:"Clear Focus Energy",cat:"Energy",emoji:"⚡",
+tag:"Clear energy. Sharp direction.",
+tiers:[
+["Single Serve",1,25],
+["Trial Pack",3,54],
+["10 Servings",10,140],
+["Daily Supply",30,330],
+["Bulk Supply",60,540],
+["One Pound Supply",0,1500]]
+},
+{
+name:"White Lightning",cat:"Energy",emoji:"🌩️",
+tag:"Turn it up.",
+tiers:[
+["Single Serve",1,65],
+["Trial Pack",3,150],
+["10 Servings",10,400],
+["Daily Supply",30,900]]
+},
+{
+name:"Focus Fixer",cat:"Focus",emoji:"🧠",
+tag:"Lock in.",
+tiers:[
+["Single Serve",1,10],
+["Trial Pack",3,28],
+["10 Servings",10,90],
+["Daily Supply",30,255],
+["Bulk Supply",60,480]]
+},
+{
+name:"Horse Health",cat:"Wellness",emoji:"🐴",
+tag:"A little horsepower.",
+tiers:[
+["Single Serve",1,40],
+["Trial Pack",3,108],
+["10 Servings",10,340],
+["Daily Supply",30,960]]
+}
+];
+
+function money(n){return "$"+n.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}
+
+function render(list=products){
+const grid=document.getElementById("grid");
+grid.innerHTML="";
+list.forEach((p,pi)=>{
+let t=p.tiers[0];
+let card=document.createElement("article");
+card.className="card";
+card.innerHTML=`
+<div class="visual">
+<div class="brand">LAB²TABLE / ${p.cat.toUpperCase()}</div>
+<div class="emoji">${p.emoji}</div>
+</div>
+<div class="info">
+<div class="category">${p.cat}</div>
+<h2>${p.name}</h2>
+<div class="subtitle">${p.tag}</div>
+
+<div class="priceRow">
+<div>
+<div class="price" id="price-${pi}">${money(t[2])}</div>
+<div class="per" id="per-${pi}">${t[1]?money(t[2]/t[1])+" / SERVING":"ONE POUND SUPPLY"}</div>
+</div>
+</div>
+
+<div class="sliderBox">
+<input class="slider" type="range" min="0" max="${p.tiers.length-1}" value="0"
+oninput="changeTier(${pi},this.value)">
+<div class="tier" id="tier-${pi}">${t[0]}</div>
+<div class="servings" id="servings-${pi}">${t[1]?t[1]+" SERVINGS":"1 POUND"}</div>
+<div class="save" id="save-${pi}"></div>
+</div>
+
+<div class="actions">
+<button class="view" onclick="showModal(${pi})">VIEW PRODUCT</button>
+<button class="add" onclick="showModal(${pi})">+</button>
+</div>
+</div>`;
+grid.appendChild(card);
+});
+}
+
+function changeTier(pi,index){
+let p=products[pi],t=p.tiers[index];
+document.getElementById("price-"+pi).textContent=money(t[2]);
+document.getElementById("per-"+pi).textContent=t[1]?money(t[2]/t[1])+" / SERVING":"ONE POUND SUPPLY";
+document.getElementById("tier-"+pi).textContent=t[0];
+document.getElementById("servings-"+pi).textContent=t[1]?t[1]+" SERVINGS":"1 POUND";
+
+if(t[1]){
+let savings=p.tiers[0][2]*t[1]-t[2];
+document.getElementById("save-"+pi).textContent=savings>0?"SAVE "+money(savings):"";
+}else{
+document.getElementById("save-"+pi).textContent="";
+}
+}
+
+function filter(cat,button){
+document.querySelectorAll(".cat").forEach(x=>x.classList.remove("active"));
+button.classList.add("active");
+document.getElementById("heading").textContent=cat==="All"?"Shop Lab²Table":cat;
+render(cat==="All"?products:products.filter(p=>p.cat===cat));
+}
+
+function showModal(i){
+let p=products[i];
+document.getElementById("modalCat").textContent="LAB²TABLE / "+p.cat;
+document.getElementById("modalName").textContent=p.name;
+document.getElementById("modalText").textContent=p.tag+" Explore the available supply options and product information.";
+document.getElementById("modal").classList.add("show");
+}
+
+function hideModal(){document.getElementById("modal").classList.remove("show")}
+function closeModal(e){if(e.target.id==="modal")hideModal()}
+
+render();
+</script>
+</body>
+</html>
