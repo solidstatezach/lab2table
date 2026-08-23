@@ -127,165 +127,8 @@ footer{background:#111;color:white;padding:60px 20px}
   .formGrid>div:last-child{grid-column:span 2}
 }
 </style>
-
-<style id="lab2table-mobile-polish">
-.launch-banner{
-  width:100%;
-  box-sizing:border-box;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:14px;
-  padding:12px 18px;
-  background:#111;
-  color:#fff;
-  font-size:14px;
-  position:relative;
-  z-index:50;
-}
-
-.launch-banner div{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
-.launch-banner strong{
-  letter-spacing:.04em;
-}
-
-.launch-banner span{
-  opacity:.82;
-}
-
-.launch-banner button{
-  border:0;
-  background:#fff;
-  color:#111;
-  border-radius:999px;
-  padding:9px 14px;
-  font-weight:800;
-  white-space:nowrap;
-  cursor:pointer;
-}
-
-.mobile-cart-bar{
-  display:none;
-}
-
-@media(max-width:700px){
-
-  body{
-    padding-bottom:82px;
-  }
-
-  .launch-banner{
-    padding:11px 13px;
-    font-size:12px;
-  }
-
-  .launch-banner div{
-    gap:4px 8px;
-  }
-
-  .launch-banner button{
-    padding:8px 11px;
-    font-size:11px;
-  }
-
-  .mobile-cart-bar{
-    position:fixed;
-    display:flex;
-    left:10px;
-    right:10px;
-    bottom:10px;
-    z-index:9999;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-    padding:10px 12px;
-    border-radius:18px;
-    background:#111;
-    color:#fff;
-    box-shadow:0 10px 30px rgba(0,0,0,.28);
-  }
-
-  .mobile-cart-bar button{
-    border:0;
-    border-radius:13px;
-    background:#fff;
-    color:#111;
-    padding:11px 15px;
-    font-weight:900;
-    cursor:pointer;
-  }
-
-  .mobile-cart-info{
-    min-width:0;
-  }
-
-  .mobile-cart-label{
-    font-size:11px;
-    opacity:.65;
-    text-transform:uppercase;
-    letter-spacing:.08em;
-  }
-
-  .mobile-cart-total{
-    font-size:16px;
-    font-weight:900;
-  }
-
-  /* Make product controls easier to tap */
-  .add,
-  button{
-    min-height:42px;
-  }
-
-  .add{
-    width:100%;
-  }
-
-  input,
-  select{
-    min-height:44px;
-    font-size:16px;
-  }
-}
-
-.hot-product{
-  position:relative;
-}
-
-.hot-product::before{
-  content:"🔥 HOT NEW";
-  position:absolute;
-  top:10px;
-  left:10px;
-  z-index:3;
-  background:#111;
-  color:#fff;
-  padding:6px 9px;
-  border-radius:999px;
-  font-size:10px;
-  font-weight:900;
-  letter-spacing:.06em;
-}
-</style>
-
 </head>
 <body>
-<div class="launch-banner">
-  <div>
-    <strong>🚀 LAUNCH SPECIAL</strong>
-    <span>Use code <b>LAUNCH10</b> for 10% off</span>
-  </div>
-  <button onclick="document.querySelector('#promoCode')?.focus()">
-    SHOP NOW
-  </button>
-</div>
-
 
 <header>
 <div class="nav">
@@ -442,7 +285,7 @@ tiers:[
 ["Daily Supply",30,2025]]
 },
 {
-name:"Clear Energy",cat:"Energy",emoji:"⚡",
+name:"Clear Focus Energy",cat:"Energy",emoji:"⚡",
 tag:"Clear energy. Sharp direction.",
 tiers:[
 ["Single Serve",1,25],
@@ -453,7 +296,7 @@ tiers:[
 ["One Pound Supply",0,1500]]
 },
 {
-name:"White Energy",cat:"Energy",emoji:"🌩️",
+name:"White Lightning",cat:"Energy",emoji:"🌩️",
 tag:"Turn it up.",
 tiers:[
 ["Single Serve",1,65],
@@ -557,25 +400,6 @@ document.getElementById("modal").classList.add("show");
 
 function hideModal(){document.getElementById("modal").classList.remove("show")}
 function closeModal(e){if(e.target.id==="modal")hideModal()}
-
-
-function updateMobileCartBar(){
-  const el = document.getElementById("mobileCartTotal");
-  if(!el) return;
-
-  const count = cart.reduce((sum,item)=>sum + Number(item.qty || 0),0);
-  const total = cartSubtotal() - discountAmount();
-
-  el.textContent = count
-    ? `${count} item${count === 1 ? "" : "s"} • ${money(total)}`
-    : "$0.00";
-}
-
-const originalUpdateCart = updateCart;
-updateCart = function(){
-  originalUpdateCart();
-  updateMobileCartBar();
-};
 
 render();
 
@@ -833,14 +657,5 @@ document.querySelectorAll(".add").forEach((button,index)=>{
   button.onclick = () => addToCart(index);
 });
 </script>
-
-<div class="mobile-cart-bar" id="mobileCartBar">
-  <div class="mobile-cart-info">
-    <div class="mobile-cart-label">Your Cart</div>
-    <div class="mobile-cart-total" id="mobileCartTotal">$0.00</div>
-  </div>
-  <button type="button" onclick="openCart()">🛒 View Cart</button>
-</div>
-
 </body>
 </html>
