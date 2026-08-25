@@ -6,10 +6,6 @@ export default async function handler(req, res) {
   try {
     const order = req.body;
 
-    const orderNumber =
-      order.orderNumber ||
-      `L2T-${Math.floor(100000 + Math.random() * 900000)}`;
-
     if (!order?.customer?.name ||
         !order?.customer?.address1 ||
         !order?.customer?.city ||
@@ -44,7 +40,6 @@ export default async function handler(req, res) {
 
     const html = `
       <h1>🔥 New Lab²Table Order</h1>
-      <p><strong>Order #:</strong> ${escapeHtml(orderNumber)}</p>
 
       <h2>Customer</h2>
       <p>
@@ -99,57 +94,8 @@ export default async function handler(req, res) {
       });
     }
 
-    // Send confirmation to the customer.
-    const confirmation = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${process.env.RESEND_API_KEY}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        from: "Lab²Table Orders <onboarding@resend.dev>",
-        to: [customer.email],
-        subject: `Lab²Table Order #${orderNumber} Received`,
-        html: `
-          <h1>Lab²Table Order Received</h1>
-
-          <p>Thanks, ${escapeHtml(customer.name)}!</p>
-
-          <p>
-            We've received your order request and will review it
-            before contacting you to confirm delivery.
-          </p>
-
-          <h2>Order #${escapeHtml(orderNumber)}</h2>
-
-          <h3>Items</h3>
-          <ul>${lines}</ul>
-
-          <p><strong>Total: $${total}</strong></p>
-
-          <p>
-            This is an order request. Payment has not been collected.
-          </p>
-
-          <p>
-            Lab²Table
-          </p>
-        `
-      })
-    });
-
-    const confirmationResult = await confirmation.json();
-
-    if (!confirmation.ok) {
-      console.error("Customer confirmation email error:", confirmationResult);
-
-      // The owner's order was successfully received, so don't
-      // reject the order just because the customer confirmation failed.
-    }
-
     return res.status(200).json({
       success: true,
-      orderNumber,
       message: "Order received."
     });
 

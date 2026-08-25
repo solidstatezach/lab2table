@@ -796,11 +796,7 @@ async function submitOrder(event){
     };
   });
 
-  const orderNumber =
-    `L2T-${Math.floor(100000 + Math.random() * 900000)}`;
-
   const order = {
-    orderNumber,
     customer: {
       name: data.get("name"),
       address1: data.get("address1"),
@@ -834,22 +830,9 @@ async function submitOrder(event){
     }
 
     status.innerHTML =
-      `<div class="success" style="padding:20px;text-align:center">
-        <div style="font-size:34px;margin-bottom:8px">✓</div>
-        <h2 style="margin:0 0 8px">Order Received</h2>
-        <p style="margin:0 0 12px">
-          Your Lab²Table order request has been received.
-        </p>
-        <strong style="font-size:18px">
-          Order #${result.orderNumber || orderNumber}
-        </strong>
-        <p style="margin:12px 0 0">
-          A confirmation email has been sent to
-          ${data.get("email")}.
-        </p>
-        <p style="margin:12px 0 0">
-          We'll contact you to confirm delivery.
-        </p>
+      `<div class="success">
+        ✓ Order received!<br><br>
+        We'll review your order and contact you to confirm delivery.
       </div>`;
 
     cart = [];
