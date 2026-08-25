@@ -1,0 +1,26 @@
+{
+  "name": "lab2table",
+  "version": "1.0.0",
+  "description": "Lab²Table - Supplements with a point",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/solidstatezach/lab2table.git"
+  },
+  "keywords": [
+    "supplements",
+    "lab2table"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/solidstatezach/lab2table/issues"
+  },
+  "homepage": "https://github.com/solidstatezach/lab2table#readme",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}
