@@ -332,50 +332,6 @@ footer{background:#111;color:white;padding:60px 20px}
 }
 </style>
 
-
-<style id="lab2table-checkout-scroll-fix">
-@media (max-width:700px){
-
-  /* The checkout overlay fills the phone without being covered */
-  #checkoutModal{
-    position:fixed !important;
-    inset:0 !important;
-    z-index:2000 !important;
-    overflow-y:auto !important;
-    -webkit-overflow-scrolling:touch !important;
-    padding:16px 12px 130px !important;
-    box-sizing:border-box !important;
-  }
-
-  /* Let the actual checkout content determine its own height */
-  #checkoutModal > div,
-  #checkoutModal .modal,
-  #checkoutModal .checkout{
-    max-height:none !important;
-    height:auto !important;
-    overflow:visible !important;
-    box-sizing:border-box !important;
-  }
-
-  /* Never let the order summary push the buttons underneath
-     the sticky cart */
-  #checkoutSummary{
-    max-height:none !important;
-    overflow:visible !important;
-  }
-
-  /* Checkout buttons stay easy to tap */
-  #checkoutModal button{
-    min-height:52px !important;
-  }
-
-  /* Extra room after the final button */
-  #checkoutModal form{
-    padding-bottom:30px !important;
-  }
-}
-</style>
-
 </head>
 <body>
 <div class="launch-banner">
