@@ -567,53 +567,6 @@ Share your referral code. Friends save 10%. You earn $10 store credit.
 />
 </div>
 
-
-<div id="lab2table-giftcard-box" style="
-  margin-top:16px;
-  padding:14px;
-  border:1px solid #ddd;
-  border-radius:14px;
-">
-  <label for="giftCard" style="font-weight:700;">
-    Gift Card
-  </label>
-
-  <input
-    id="giftCard"
-    name="giftCard"
-    type="text"
-    placeholder="Enter gift card code"
-    autocomplete="off"
-    style="
-      width:100%;
-      box-sizing:border-box;
-      margin-top:7px;
-    "
-  >
-
-  <button
-    type="button"
-    onclick="validateGiftCard()"
-    style="margin-top:8px;"
-  >
-    Apply Gift Card
-  </button>
-
-  <div
-    id="giftCardMessage"
-    style="display:none;margin-top:8px;font-size:13px;font-weight:600;"
-  ></div>
-
-  <div
-    id="giftCardTotal"
-    style="margin-top:7px;font-size:13px;font-weight:800;"
-  ></div>
-
-  <div style="margin-top:7px;font-size:11px;opacity:.65;">
-    Gift cards require the applicable minimum order.
-  </div>
-</div>
-
 </form>
 
   </div>
@@ -999,9 +952,7 @@ async function submitOrder(event){
     },
     items,
     promo: activePromo,
-    total: Math.max(0, Number(cartSubtotal() - discountAmount() - giftCardValue())),,
-    giftCard: activeGiftCard || null,
-    giftCardCredit: Number(giftCardValue())
+    total: Number(cartSubtotal() - discountAmount()),
     referral:data.get("referral")
   };
 
@@ -1088,152 +1039,6 @@ s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
 <!-- End of Lab²Table Tawk.to Live Chat -->
-
-
-<script id="lab2table-giftcards">
-/*
-  Lab2Table private gift-card credits.
-
-  Lisa:
-    Code: LISA50
-    Credit: $50
-    Minimum subtotal: $100
-
-  Josh:
-    Code: JOSH200
-    Credit: $200
-    Minimum subtotal: $350
-*/
-
-const LAB2TABLE_GIFTCARDS = {
-  "LISA50": {
-    recipient: "Lisa",
-    balance: 50,
-    minimum: 100
-  },
-  "JOSH200": {
-    recipient: "Josh",
-    balance: 200,
-    minimum: 350
-  }
-};
-
-let activeGiftCard = null;
-
-function giftCardValue() {
-  if (!activeGiftCard) return 0;
-
-  const card = LAB2TABLE_GIFTCARDS[activeGiftCard];
-  if (!card) return 0;
-
-  const subtotal = Number(cartSubtotal());
-
-  if (subtotal < card.minimum) return 0;
-
-  return Math.min(card.balance, subtotal);
-}
-
-function validateGiftCard() {
-  const input = document.getElementById("giftCard");
-  const message = document.getElementById("giftCardMessage");
-
-  if (!input) return true;
-
-  const code = input.value.trim().toUpperCase();
-
-  activeGiftCard = null;
-
-  if (!code) {
-    if (message) {
-      message.textContent = "";
-      message.style.display = "none";
-    }
-    updateGiftCardTotal();
-    return true;
-  }
-
-  const card = LAB2TABLE_GIFTCARDS[code];
-
-  if (!card) {
-    if (message) {
-      message.textContent = "Gift card code not recognized.";
-      message.style.display = "block";
-    }
-    updateGiftCardTotal();
-    return false;
-  }
-
-  const subtotal = Number(cartSubtotal());
-
-  if (subtotal < card.minimum) {
-    if (message) {
-      message.textContent =
-        `${card.recipient}'s $${card.balance} gift card requires a $${card.minimum} minimum order. ` +
-        `Current subtotal: ${money(subtotal)}.`;
-      message.style.display = "block";
-    }
-    updateGiftCardTotal();
-    return false;
-  }
-
-  activeGiftCard = code;
-
-  if (message) {
-    message.textContent =
-      `✓ ${card.recipient}'s gift card applied: -${money(Math.min(card.balance, subtotal))}`;
-    message.style.display = "block";
-  }
-
-  updateGiftCardTotal();
-  return true;
-}
-
-function updateGiftCardTotal() {
-  const el = document.getElementById("giftCardTotal");
-  if (!el) return;
-
-  const subtotal = Number(cartSubtotal());
-  const gift = giftCardValue();
-
-  el.textContent = gift
-    ? `Gift card: -${money(gift)} • New total: ${money(Math.max(0, subtotal - gift))}`
-    : "";
-}
-
-function addGiftCardToOrder(order) {
-  order.giftCard = activeGiftCard || null;
-  order.giftCardCredit = Number(giftCardValue());
-  return order;
-}
-</script>
-
-
-<script id="GIFT_CARD_VALIDATION_BEFORE_SUBMIT">
-/*
-  Validate the gift card immediately before submission.
-*/
-(function(){
-
-  const originalSubmitOrder = submitOrder;
-
-  submitOrder = async function(event){
-
-    const giftInput = document.getElementById("giftCard");
-
-    if (giftInput && giftInput.value.trim()) {
-      const valid = validateGiftCard();
-
-      if (!valid) {
-        if (event) event.preventDefault();
-        return;
-      }
-    }
-
-    return originalSubmitOrder(event);
-  };
-
-})();
-</script>
 
 </body>
 </html>

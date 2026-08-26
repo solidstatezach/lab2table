@@ -126,14 +126,7 @@ export default async function handler(req, res) {
           <h3>Items</h3>
           <ul>${lines}</ul>
 
-          
-<p><strong>Gift Card:</strong>
-${escapeHtml(order.giftCard || "None")}</p>
-
-<p><strong>Gift Card Credit:</strong>
-$${Number(order.giftCardCredit || 0).toFixed(2)}</p>
-
-<p><strong>Total: $${total}</strong></p>
+          <p><strong>Total: $${total}</strong></p>
 
           <p>
             This is an order request. Payment has not been collected.
