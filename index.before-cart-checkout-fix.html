@@ -376,19 +376,6 @@ footer{background:#111;color:white;padding:60px 20px}
 }
 </style>
 
-
-<style id="lab2table-cart-checkout-fix">
-/* Never let the sticky cart cover checkout */
-body.checkout-open .mobile-cart-bar{
-  display:none !important;
-}
-
-/* Keep checkout above everything else */
-#checkoutModal{
-  z-index:2000 !important;
-}
-</style>
-
 </head>
 <body>
 <div class="launch-banner">
@@ -841,7 +828,6 @@ function closeCart(){
 
 function openCheckout(){
   if(!cart.length) return;
-  document.body.classList.add("checkout-open");
 
   const summary = cart.map(item=>{
     const p = productByName(item.name);
@@ -866,7 +852,6 @@ function openCheckout(){
 
 function closeCheckout(){
   document.getElementById("checkoutModal").classList.remove("show");
-  document.body.classList.remove("checkout-open");
 }
 
 async function submitOrder(event){
@@ -946,7 +931,6 @@ async function submitOrder(event){
 
     cart = [];
     activePromo = null;
-    document.body.classList.remove("checkout-open");
     updateCart();
 
     form.reset();
