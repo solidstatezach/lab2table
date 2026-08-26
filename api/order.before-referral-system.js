@@ -47,7 +47,6 @@ export default async function handler(req, res) {
       <p><strong>Order #:</strong> ${escapeHtml(orderNumber)}</p>
 
       <h2>Customer</h2>
-<p><strong>Referral Code:</strong> ${escapeHtml(order.referral || "None")}</p>
       <p>
         <strong>Name:</strong> ${escapeHtml(customer.name)}<br>
         <strong>Phone:</strong> ${escapeHtml(customer.phone)}<br>
