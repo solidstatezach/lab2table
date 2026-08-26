@@ -391,23 +391,6 @@ body.checkout-open .mobile-cart-bar{
 
 </head>
 <body>
-
-<div style="
-margin:14px auto;
-max-width:900px;
-padding:14px;
-border-radius:16px;
-background:#f5f3ed;
-text-align:center;
-font-weight:700;
-">
-💸 GIVE 10% • GET $10 STORE CREDIT
-<br>
-<span style="font-size:14px;font-weight:500">
-Share your referral code. Friends save 10%. You earn $10 store credit.
-</span>
-</div>
-
 <div class="launch-banner">
   <div>
     <strong>🚀 LAUNCH SPECIAL</strong>
@@ -538,17 +521,7 @@ Share your referral code. Friends save 10%. You earn $10 store credit.
       </button>
 
       <div id="orderStatus"></div>
-    
-<div style="margin-top:12px">
-<label>Referral Code (optional)</label>
-<input
- name="referral"
- placeholder="Friend referral code"
-/>
-</div>
-
-</form>
-
+    </form>
   </div>
 </div>
 
@@ -932,8 +905,7 @@ async function submitOrder(event){
     },
     items,
     promo: activePromo,
-    total: Number(cartSubtotal() - discountAmount()),
-    referral:data.get("referral")
+    total: Number(cartSubtotal() - discountAmount())
   };
 
   status.innerHTML = "Sending order…";
