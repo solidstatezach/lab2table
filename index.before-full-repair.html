@@ -389,28 +389,6 @@ body.checkout-open .mobile-cart-bar{
 }
 </style>
 
-
-<style id="lab2table-hot-product-polish">
-.hot-product{
-  position:relative;
-}
-.hot-product::after{
-  content:"🔥 HOT NEW";
-  position:absolute;
-  top:14px;
-  right:14px;
-  z-index:4;
-  background:#fff;
-  color:#111;
-  padding:7px 10px;
-  border-radius:999px;
-  font-size:9px;
-  font-weight:900;
-  letter-spacing:.08em;
-  box-shadow:0 4px 15px #0003;
-}
-</style>
-
 </head>
 <body>
 
@@ -664,69 +642,52 @@ Share your referral code. Friends save 10%. You earn $10 store credit.
 <script>
 const products=[
 {
- name:"Molly's Dancing Shoes",cat:"Hot New Products",emoji:"💃",
- tag:"Find your rhythm.",
- tiers:[
-  ["Single Serve",1,75],
-  ["Trial Pack",3,220],
-  ["10 Servings",10,700],
-  ["Daily Supply",30,2025]]
+name:"Molly's Dancing Shoes",cat:"Hot New Products",emoji:"💃",
+tag:"Find your rhythm.",
+tiers:[
+["Single Serve",1,75],
+["Trial Pack",3,220],
+["10 Servings",10,700],
+["Daily Supply",30,2025]]
 },
 {
- name:"Dimitri's Blend",cat:"Hot New Products",emoji:"🧪",
- tag:"A premium Lab²Table blend.",
- tiers:[
-  ["Single Serve",1,75],
-  ["Trial Pack",3,225],
-  ["5 Servings",5,350],
-  ["10 Servings",10,700]]
+name:"Clear Energy",cat:"Energy",emoji:"⚡",
+tag:"Clear energy. Sharp direction.",
+tiers:[
+["Single Serve",1,25],
+["Trial Pack",3,54],
+["10 Servings",10,140],
+["Daily Supply",30,330],
+["Bulk Supply",60,540],
+["One Pound Supply",0,1500]]
 },
 {
- name:"Chill Pills",cat:"Hot New Products",emoji:"💊",
- tag:"A Lab²Table wellness supplement.",
- tiers:[
-  ["Single Serve",1,7],
-  ["Trial Pack",3,21],
-  ["10 Servings",10,65]]
+name:"White Energy",cat:"Energy",emoji:"🌩️",
+tag:"Turn it up.",
+tiers:[
+["Single Serve",1,65],
+["Trial Pack",3,150],
+["10 Servings",10,400],
+["Daily Supply",30,900]]
 },
 {
- name:"Clear Energy",cat:"Energy",emoji:"⚡",
- tag:"Clear energy. Sharp direction.",
- tiers:[
-  ["Single Serve",1,25],
-  ["Trial Pack",3,54],
-  ["10 Servings",10,140],
-  ["Daily Supply",30,330],
-  ["Bulk Supply",60,540],
-  ["One Pound Supply",0,1500]]
+name:"Focus Fixer",cat:"Focus",emoji:"🧠",
+tag:"Lock in.",
+tiers:[
+["Single Serve",1,10],
+["Trial Pack",3,28],
+["10 Servings",10,90],
+["Daily Supply",30,255],
+["Bulk Supply",60,480]]
 },
 {
- name:"White Energy",cat:"Energy",emoji:"🌩️",
- tag:"Turn it up.",
- tiers:[
-  ["Single Serve",1,65],
-  ["Trial Pack",3,150],
-  ["10 Servings",10,400],
-  ["Daily Supply",30,900]]
-},
-{
- name:"Focus Fixer",cat:"Focus",emoji:"🧠",
- tag:"Lock in.",
- tiers:[
-  ["Single Serve",1,10],
-  ["Trial Pack",3,28],
-  ["10 Servings",10,90],
-  ["Daily Supply",30,255],
-  ["Bulk Supply",60,480]]
-},
-{
- name:"Horse Health",cat:"Wellness",emoji:"🐴",
- tag:"A little horsepower.",
- tiers:[
-  ["Single Serve",1,40],
-  ["Trial Pack",3,108],
-  ["10 Servings",10,340],
-  ["Daily Supply",30,960]]
+name:"Horse Health",cat:"Wellness",emoji:"🐴",
+tag:"A little horsepower.",
+tiers:[
+["Single Serve",1,40],
+["Trial Pack",3,108],
+["10 Servings",10,340],
+["Daily Supply",30,960]]
 }
 ];
 
@@ -738,7 +699,7 @@ grid.innerHTML="";
 list.forEach((p,pi)=>{
 let t=p.tiers[0];
 let card=document.createElement("article");
-card.className="card"+(p.cat==="Hot New Products"?" hot-product":"");
+card.className="card";
 card.innerHTML=`
 <div class="visual">
 <div class="brand">LAB²TABLE / ${p.cat.toUpperCase()}</div>
@@ -824,6 +785,8 @@ updateCart = function(){
   originalUpdateCart();
   updateMobileCartBar();
 };
+
+render();
 
 let cart = [];
 let activePromo = null;
@@ -940,8 +903,7 @@ function updateCart(){
   document.getElementById("subtotal").textContent = money(subtotal);
   document.getElementById("discount").textContent =
     discount ? "-"+money(discount) : money(0);
-  document.getElementById("total").textContent =
-    money(Math.max(0, subtotal-discount-(typeof giftCardValue==="function"?giftCardValue():0)));
+  document.getElementById("total").textContent = money(subtotal-discount);
 }
 
 function applyPromo(){
@@ -989,11 +951,7 @@ function openCheckout(){
     `<hr style="border:0;border-top:1px solid #ddd;margin:12px 0">
      <div style="display:flex;justify-content:space-between">
        <strong>TOTAL</strong>
-       <strong>${money(Math.max(
-        0,
-        cartSubtotal()-discountAmount()-
-        (typeof giftCardValue==="function"?giftCardValue():0)
-      ))}</strong>
+       <strong>${money(cartSubtotal()-discountAmount())}</strong>
      </div>`;
 
   document.getElementById("checkoutModal").classList.add("show");
@@ -1041,9 +999,9 @@ async function submitOrder(event){
     },
     items,
     promo: activePromo,
-    total: Math.max(0, Number(cartSubtotal() - discountAmount() - giftCardValue())),
+    total: Math.max(0, Number(cartSubtotal() - discountAmount() - giftCardValue())),,
     giftCard: activeGiftCard || null,
-    giftCardCredit: Number(giftCardValue()),
+    giftCardCredit: Number(giftCardValue())
     referral:data.get("referral")
   };
 
