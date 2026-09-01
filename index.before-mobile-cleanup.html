@@ -128,297 +128,286 @@ footer{background:#111;color:white;padding:60px 20px}
 }
 </style>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<style id="lab2table-mobile-clean">
-/* ===== Lab²Table mobile cleanup ===== */
-
-html{
+<style id="lab2table-mobile-polish">
+.launch-banner{
   width:100%;
-  max-width:100%;
-  overflow-x:hidden;
+  box-sizing:border-box;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  padding:12px 18px;
+  background:#111;
+  color:#fff;
+  font-size:14px;
+  position:relative;
+  z-index:50;
 }
 
-body{
-  width:100%;
-  max-width:100%;
-  overflow-x:hidden;
+.launch-banner div{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
 }
 
-img,
-video,
-iframe{
-  max-width:100%;
+.launch-banner strong{
+  letter-spacing:.04em;
+}
+
+.launch-banner span{
+  opacity:.82;
+}
+
+.launch-banner button{
+  border:0;
+  background:#fff;
+  color:#111;
+  border-radius:999px;
+  padding:9px 14px;
+  font-weight:800;
+  white-space:nowrap;
+  cursor:pointer;
+}
+
+.mobile-cart-bar{
+  display:none;
 }
 
 @media(max-width:700px){
 
-  /* Prevent the site from feeling zoomed/crowded */
   body{
-    padding-bottom:76px !important;
-    font-size:15px;
+    padding-bottom:82px;
   }
 
-  .nav{
-    padding:12px 14px !important;
-  }
-
-  .logo{
-    font-size:19px !important;
-  }
-
-  .tag{
-    font-size:7px !important;
-    letter-spacing:2px !important;
-  }
-
-  .nav .btn{
-    padding:10px 14px !important;
-    font-size:12px !important;
-    min-height:40px !important;
-  }
-
-  .hero{
-    padding:48px 16px 45px !important;
-  }
-
-  h1{
-    font-size:clamp(48px,15vw,72px) !important;
-    line-height:.88 !important;
-    letter-spacing:-3px !important;
-    margin:16px 0 !important;
-  }
-
-  .hero p{
-    font-size:16px !important;
-    line-height:1.5 !important;
-  }
-
-  .catbar{
-    padding:12px 14px !important;
-    gap:7px !important;
-  }
-
-  .cat{
-    padding:10px 15px !important;
-    font-size:12px !important;
-  }
-
-  .products{
-    padding:42px 14px !important;
-  }
-
-  .grid{
-    grid-template-columns:1fr !important;
-    gap:16px !important;
-  }
-
-  .card{
-    border-radius:22px !important;
-  }
-
-  .visual{
-    height:235px !important;
-  }
-
-  .visual .emoji{
-    font-size:60px !important;
-  }
-
-  .info{
-    padding:19px !important;
-  }
-
-  h2{
-    font-size:24px !important;
-  }
-
-  .price{
-    font-size:27px !important;
-  }
-
-  .sliderBox{
-    padding:14px !important;
-    margin-top:17px !important;
-  }
-
-  .actions{
-    gap:8px !important;
-    margin-top:14px !important;
-  }
-
-  .view{
-    padding:12px !important;
-    min-height:44px !important;
-  }
-
-  .add{
-    width:54px !important;
-    min-height:44px !important;
-  }
-
-  /* Launch banner */
   .launch-banner{
-    padding:9px 12px !important;
-    gap:8px !important;
-    font-size:11px !important;
+    padding:11px 13px;
+    font-size:12px;
   }
 
   .launch-banner div{
-    min-width:0;
-    gap:3px 6px !important;
+    gap:4px 8px;
   }
 
   .launch-banner button{
-    padding:8px 10px !important;
-    font-size:10px !important;
-    min-height:36px !important;
+    padding:8px 11px;
+    font-size:11px;
   }
 
-  /* Single compact cart bar */
   .mobile-cart-bar{
-    position:fixed !important;
-    left:10px !important;
-    right:10px !important;
-    bottom:10px !important;
-    width:auto !important;
-    max-width:none !important;
-    min-height:54px !important;
-    padding:8px 10px !important;
-    border-radius:16px !important;
-    display:flex !important;
-    align-items:center !important;
-    gap:8px !important;
-    z-index:1500 !important;
-  }
-
-  .mobile-cart-info{
-    flex:1 !important;
-    min-width:0 !important;
-  }
-
-  .mobile-cart-label{
-    font-size:9px !important;
-  }
-
-  .mobile-cart-total{
-    font-size:14px !important;
-    white-space:nowrap;
+    position:fixed;
+    display:flex;
+    left:10px;
+    right:10px;
+    bottom:10px;
+    z-index:9999;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:10px 12px;
+    border-radius:18px;
+    background:#111;
+    color:#fff;
+    box-shadow:0 10px 30px rgba(0,0,0,.28);
   }
 
   .mobile-cart-bar button{
-    flex:0 0 auto !important;
-    min-height:40px !important;
-    padding:9px 12px !important;
-    border-radius:12px !important;
-    font-size:12px !important;
+    border:0;
+    border-radius:13px;
+    background:#fff;
+    color:#111;
+    padding:11px 15px;
+    font-weight:900;
+    cursor:pointer;
   }
 
-  /* Tawk/chat stays on the opposite side of the cart */
-  #tawkchat-minified-box,
-  .tawk-min-container,
-  [class*="tawk-min"]{
-    z-index:1600 !important;
+  .mobile-cart-info{
+    min-width:0;
   }
 
-  /* Checkout gets the whole screen and hides the cart */
-  body.checkout-open .mobile-cart-bar{
-    display:none !important;
+  .mobile-cart-label{
+    font-size:11px;
+    opacity:.65;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+  }
+
+  .mobile-cart-total{
+    font-size:16px;
+    font-weight:900;
+  }
+
+  /* Make product controls easier to tap */
+  .add,
+  button{
+    min-height:42px;
+  }
+
+  .add{
+    width:100%;
+  }
+
+  input,
+  select{
+    min-height:44px;
+    font-size:16px;
+  }
+}
+
+.hot-product{
+  position:relative;
+}
+
+.hot-product::before{
+  content:"🔥 HOT NEW";
+  position:absolute;
+  top:10px;
+  left:10px;
+  z-index:3;
+  background:#111;
+  color:#fff;
+  padding:6px 9px;
+  border-radius:999px;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.06em;
+}
+</style>
+
+
+<style id="lab2table-chat-layout">
+@media(max-width:700px){
+
+  /* Keep the Lab²Table cart on the lower-left,
+     leaving the Tawk.to chat bubble on the lower-right. */
+  .mobile-cart-bar{
+    left:10px !important;
+    right:auto !important;
+    bottom:10px !important;
+    width:auto !important;
+    max-width:calc(100vw - 90px) !important;
+  }
+
+  .mobile-cart-bar button{
+    white-space:nowrap;
+  }
+
+  /* Give the page enough room for the sticky controls. */
+  body{
+    padding-bottom:88px !important;
+  }
+}
+</style>
+
+
+<style id="lab2table-checkout-mobile-fix">
+@media (max-width:700px){
+
+  /* Keep checkout controls clear of the sticky cart */
+  #checkoutModal{
+    padding-bottom:110px !important;
+  }
+
+  #checkoutModal .modal,
+  #checkoutModal .checkout,
+  #checkoutModal form{
+    padding-bottom:30px !important;
+  }
+
+  /* Make the final checkout controls comfortably tappable */
+  #checkoutModal button[type="submit"],
+  #checkoutModal button[type="button"]{
+    min-height:52px !important;
+    margin-bottom:12px !important;
+  }
+
+  /* Prevent the sticky cart from covering modal content */
+  .mobile-cart-bar{
+    z-index:900 !important;
   }
 
   #checkoutModal{
     z-index:2000 !important;
-    padding:12px 10px 30px !important;
-    overflow-y:auto !important;
-  }
-
-  #checkoutModal .modalBox{
-    width:100% !important;
-    max-width:700px !important;
-    padding:20px !important;
-    border-radius:22px !important;
-    max-height:none !important;
-  }
-
-  #checkoutModal h2{
-    font-size:32px !important;
-  }
-
-  #checkoutModal input{
-    font-size:16px !important;
-    min-height:46px !important;
-  }
-
-  #checkoutModal button{
-    min-height:48px !important;
-  }
-
-  /* Prevent long text from creating horizontal overflow */
-  .subtitle,
-  .detail,
-  .cartItem,
-  .checkoutSummary{
-    overflow-wrap:anywhere;
-  }
-
-  /* Hot badge: only one badge */
-  .hot-product::before{
-    content:"🔥 HOT NEW";
-    position:absolute;
-    top:10px;
-    left:10px;
-    z-index:5;
-    background:#111;
-    color:#fff;
-    padding:6px 9px;
-    border-radius:999px;
-    font-size:9px;
-    font-weight:900;
-    letter-spacing:.06em;
-  }
-
-  .hot-product::after{
-    content:none !important;
   }
 }
+</style>
 
-/* Extra-small phones */
-@media(max-width:380px){
-  .hero{
-    padding-left:13px !important;
-    padding-right:13px !important;
+
+<style id="lab2table-checkout-scroll-fix">
+@media (max-width:700px){
+
+  /* The checkout overlay fills the phone without being covered */
+  #checkoutModal{
+    position:fixed !important;
+    inset:0 !important;
+    z-index:2000 !important;
+    overflow-y:auto !important;
+    -webkit-overflow-scrolling:touch !important;
+    padding:16px 12px 130px !important;
+    box-sizing:border-box !important;
   }
 
-  .products{
-    padding-left:11px !important;
-    padding-right:11px !important;
+  /* Let the actual checkout content determine its own height */
+  #checkoutModal > div,
+  #checkoutModal .modal,
+  #checkoutModal .checkout{
+    max-height:none !important;
+    height:auto !important;
+    overflow:visible !important;
+    box-sizing:border-box !important;
   }
 
-  .mobile-cart-bar{
-    left:7px !important;
-    right:7px !important;
+  /* Never let the order summary push the buttons underneath
+     the sticky cart */
+  #checkoutSummary{
+    max-height:none !important;
+    overflow:visible !important;
   }
 
-  .mobile-cart-bar button{
-    padding-left:9px !important;
-    padding-right:9px !important;
+  /* Checkout buttons stay easy to tap */
+  #checkoutModal button{
+    min-height:52px !important;
   }
+
+  /* Extra room after the final button */
+  #checkoutModal form{
+    padding-bottom:30px !important;
+  }
+}
+</style>
+
+
+<style id="lab2table-cart-checkout-fix">
+/* Never let the sticky cart cover checkout */
+body.checkout-open .mobile-cart-bar{
+  display:none !important;
+}
+
+/* Keep checkout above everything else */
+#checkoutModal{
+  z-index:2000 !important;
+}
+</style>
+
+
+<style id="lab2table-hot-product-polish">
+.hot-product{
+  position:relative;
+}
+.hot-product::after{
+  content:"🔥 HOT NEW";
+  position:absolute;
+  top:14px;
+  right:14px;
+  z-index:4;
+  background:#fff;
+  color:#111;
+  padding:7px 10px;
+  border-radius:999px;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.08em;
+  box-shadow:0 4px 15px #0003;
 }
 </style>
 
@@ -445,7 +434,21 @@ iframe{
 </div>
 
 
-
+<div style="
+margin:14px auto;
+max-width:900px;
+padding:14px;
+border-radius:16px;
+background:#f5f3ed;
+text-align:center;
+font-weight:700;
+">
+💸 GIVE 10% • GET $10 STORE CREDIT
+<br>
+<span style="font-size:14px;font-weight:500">
+Share your referral code. Friends save 10%. You earn $10 store credit.
+</span>
+</div>
 
 <div class="launch-banner">
   <div>
