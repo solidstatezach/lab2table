@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Lab²Table — Supplements</title>
 <style>
 *{box-sizing:border-box}
@@ -585,34 +585,34 @@ iframe[src*="tawk.to"]{
 
     <form id="orderForm" onsubmit="submitOrder(event)">
       <label>FULL NAME *</label>
-      <input required placeholder="Your full name">
+      <input required name="name" placeholder="Your full name">
 
       <label>ADDRESS LINE 1 *</label>
-      <input required placeholder="Street address">
+      <input required name="address1" placeholder="Street address">
 
       <label>ADDRESS LINE 2</label>
-      <input placeholder="Apartment, suite, unit, etc.">
+      <input name="address2" placeholder="Apartment, suite, unit, etc.">
 
       <div class="formGrid">
         <div>
           <label>CITY *</label>
-          <input required placeholder="City">
+          <input required name="city" placeholder="City">
         </div>
         <div>
           <label>STATE *</label>
-          <input required maxlength="2" placeholder="CA">
+          <input required name="state" maxlength="2" placeholder="CA">
         </div>
         <div>
           <label>ZIP *</label>
-          <input required inputmode="numeric" placeholder="ZIP">
+          <input required name="zip" inputmode="numeric" placeholder="ZIP">
         </div>
       </div>
 
       <label>PHONE *</label>
-      <input required type="tel" placeholder="Phone number">
+      <input required name="phone" type="tel" placeholder="Phone number">
 
       <label>EMAIL *</label>
-      <input required type="email" placeholder="Email address">
+      <input required name="email" type="email" placeholder="Email address">
 
       <div id="checkoutSummary" class="checkoutSummary"></div>
 
@@ -625,6 +625,7 @@ iframe[src*="tawk.to"]{
 <div style="margin-top:12px">
 <label>Referral Code (optional)</label>
 <input
+ name="referral"
  placeholder="Friend referral code"
 />
 </div>
@@ -642,6 +643,7 @@ iframe[src*="tawk.to"]{
 
   <input
     id="giftCard"
+    name="giftCard"
     type="text"
     placeholder="Enter gift card code"
     autocomplete="off"
@@ -702,7 +704,8 @@ iframe[src*="tawk.to"]{
 
 <script>
 const products=[
-{cat:"Hot New Products",emoji:"💃",
+{
+ name:"Molly's Dancing Shoes",cat:"Hot New Products",emoji:"💃",
  tag:"Find your rhythm.",
  tiers:[
   ["Single Serve",1,75],
@@ -710,7 +713,8 @@ const products=[
   ["10 Servings",10,700],
   ["Daily Supply",30,2025]]
 },
-{cat:"Hot New Products",emoji:"🧪",
+{
+ name:"Dimitri's Blend",cat:"Hot New Products",emoji:"🧪",
  tag:"A premium Lab²Table blend.",
  tiers:[
   ["Single Serve",1,75],
@@ -718,14 +722,16 @@ const products=[
   ["5 Servings",5,350],
   ["10 Servings",10,700]]
 },
-{cat:"Hot New Products",emoji:"💊",
+{
+ name:"Chill Pills",cat:"Hot New Products",emoji:"💊",
  tag:"A Lab²Table wellness supplement.",
  tiers:[
   ["Single Serve",1,7],
   ["Trial Pack",3,21],
   ["10 Servings",10,65]]
 },
-{cat:"Energy",emoji:"⚡",
+{
+ name:"Clear Energy",cat:"Energy",emoji:"⚡",
  tag:"Clear energy. Sharp direction.",
  tiers:[
   ["Single Serve",1,25],
@@ -735,7 +741,8 @@ const products=[
   ["Bulk Supply",60,540],
   ["One Pound Supply",0,1500]]
 },
-{cat:"Energy",emoji:"🌩️",
+{
+ name:"White Energy",cat:"Energy",emoji:"🌩️",
  tag:"Turn it up.",
  tiers:[
   ["Single Serve",1,65],
@@ -743,7 +750,8 @@ const products=[
   ["10 Servings",10,400],
   ["Daily Supply",30,900]]
 },
-{cat:"Focus",emoji:"🧠",
+{
+ name:"Focus Fixer",cat:"Focus",emoji:"🧠",
  tag:"Lock in.",
  tiers:[
   ["Single Serve",1,10],
@@ -752,7 +760,8 @@ const products=[
   ["Daily Supply",30,255],
   ["Bulk Supply",60,480]]
 },
-{cat:"Wellness",emoji:"🐴",
+{
+ name:"Horse Health",cat:"Wellness",emoji:"🐴",
  tag:"A little horsepower.",
  tiers:[
   ["Single Serve",1,40],
@@ -866,7 +875,7 @@ const PROMOS = {
 };
 
 function productByName(name){
-  return products.find(p => p. name);
+  return products.find(p => p.name === name);
 }
 
 function addToCart(pi){
@@ -874,13 +883,14 @@ function addToCart(pi){
   const tier = product.tiers[0];
 
   const existing = cart.find(x =>
-    x. product.name && x.tierIndex === 0
+    x.name === product.name && x.tierIndex === 0
   );
 
   if(existing){
     existing.qty++;
   }else{
     cart.push({
+      name: product.name,
       tierIndex: 0,
       qty: 1
     });
@@ -891,7 +901,7 @@ function addToCart(pi){
 }
 
 function changeCartTier(name, tierIndex){
-  const item = cart.find(x => x. name);
+  const item = cart.find(x => x.name === name);
   if(item){
     item.tierIndex = Number(tierIndex);
     updateCart();
@@ -1048,6 +1058,7 @@ async function submitOrder(event){
     const tier = p.tiers[item.tierIndex];
 
     return {
+      name: p.name,
       tier: tier[0],
       price: Number(tier[2]),
       qty: Number(item.qty)
@@ -1060,12 +1071,14 @@ async function submitOrder(event){
   const order = {
     orderNumber,
     customer: {
+      name: data.get("name"),
       address1: data.get("address1"),
       address2: data.get("address2"),
       city: data.get("city"),
       state: data.get("state"),
       zip: data.get("zip"),
       phone: data.get("phone"),
+      email: data.get("email")
     },
     items,
     promo: activePromo,
