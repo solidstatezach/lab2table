@@ -423,47 +423,30 @@ iframe{
 </style>
 
 
-
-
-
-<style id="lab2table-tawk-final-fix">
-
-/* =========================================================
-   TAWK / CART COLLISION FIX
-   Keep the floating Tawk launcher out of the cart button.
-   ========================================================= */
-
-/* Desktop: keep the cart fully accessible */
-.mobile-cart-bar{
-  position:fixed !important;
-  right:150px !important;
-  left:12px !important;
-  z-index:1500 !important;
-}
-
-/* Mobile: leave a generous lane for the Tawk launcher */
+<style id="lab2table-tawk-mobile-fix">
 @media(max-width:700px){
+
+  /* Give the Tawk bubble its own vertical lane above the cart */
+  #tawkchat-minified-box,
+  .tawk-min-container,
+  [class*="tawk-min"]{
+    bottom:82px !important;
+    right:12px !important;
+    z-index:1700 !important;
+  }
+
+  /* Keep the cart below it */
   .mobile-cart-bar{
-    left:10px !important;
-    right:95px !important;
     bottom:10px !important;
     z-index:1500 !important;
   }
 
-  .mobile-cart-bar button{
-    flex:0 0 auto !important;
-    white-space:nowrap !important;
+  /* Never let the chat widget create horizontal overflow */
+  iframe[title*="chat"],
+  iframe[src*="tawk"]{
+    max-width:100vw !important;
   }
 }
-
-/* Tawk itself stays above the page but no longer blocks the cart */
-#tawkchat-minified-box,
-.tawk-min-container,
-iframe[title*="Tawk"],
-iframe[src*="tawk.to"]{
-  z-index:1600 !important;
-}
-
 </style>
 
 </head>
