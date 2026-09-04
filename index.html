@@ -860,7 +860,7 @@ const PROMOS = {
 };
 
 function productByName(name){
-  return products.find(p => p. name);
+  return products.find(p => p.name === name);
 }
 
 function addToCart(pi){
@@ -868,13 +868,16 @@ function addToCart(pi){
   const tier = product.tiers[0];
 
   const existing = cart.find(x =>
-    x. product.name && x.tierIndex === 0
+    x.product.name === product.name &&
+    x.tierIndex === 0
   );
 
   if(existing){
     existing.qty++;
   }else{
     cart.push({
+      product,
+      tier,
       tierIndex: 0,
       qty: 1
     });
