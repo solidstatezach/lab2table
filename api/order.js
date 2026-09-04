@@ -10,13 +10,11 @@ export default async function handler(req, res) {
       order.orderNumber ||
       `L2T-${Math.floor(100000 + Math.random() * 900000)}`;
 
-    if (!order?.customer?.name ||
-        !order?.customer?.address1 ||
+    if (!order?.customer?.address1 ||
         !order?.customer?.city ||
         !order?.customer?.state ||
         !order?.customer?.zip ||
         !order?.customer?.phone ||
-        !order?.customer?.email ||
         !Array.isArray(order.items) ||
         order.items.length === 0) {
       return res.status(400).json({
@@ -49,9 +47,7 @@ export default async function handler(req, res) {
       <h2>Customer</h2>
 <p><strong>Referral Code:</strong> ${escapeHtml(order.referral || "None")}</p>
       <p>
-        <strong>Name:</strong> ${escapeHtml(customer.name)}<br>
-        <strong>Phone:</strong> ${escapeHtml(customer.phone)}<br>
-        <strong>Email:</strong> ${escapeHtml(customer.email)}
+        <strong>Phone:</strong> ${escapeHtml(customer.phone)}
       </p>
 
       <h2>Delivery Address</h2>
@@ -86,7 +82,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         from: "Lab²Table Orders <onboarding@resend.dev>",
         to: ["solidstatezach@gmail.com"],
-        subject: `🔥 Lab²Table Order — ${customer.name}`,
+        subject: `🔥 Lab²Table Order — ${customer.phone}`,
         html
       })
     });
@@ -98,61 +94,6 @@ export default async function handler(req, res) {
       return res.status(500).json({
         error: "Unable to send order email."
       });
-    }
-
-    // Send confirmation to the customer.
-    const confirmation = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${process.env.RESEND_API_KEY}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        from: "Lab²Table Orders <onboarding@resend.dev>",
-        to: [customer.email],
-        subject: `Lab²Table Order #${orderNumber} Received`,
-        html: `
-          <h1>Lab²Table Order Received</h1>
-
-          <p>Thanks, ${escapeHtml(customer.name)}!</p>
-
-          <p>
-            We've received your order request and will review it
-            before contacting you to confirm delivery.
-          </p>
-
-          <h2>Order #${escapeHtml(orderNumber)}</h2>
-
-          <h3>Items</h3>
-          <ul>${lines}</ul>
-
-          
-<p><strong>Gift Card:</strong>
-${escapeHtml(order.giftCard || "None")}</p>
-
-<p><strong>Gift Card Credit:</strong>
-$${Number(order.giftCardCredit || 0).toFixed(2)}</p>
-
-<p><strong>Total: $${total}</strong></p>
-
-          <p>
-            This is an order request. Payment has not been collected.
-          </p>
-
-          <p>
-            Lab²Table
-          </p>
-        `
-      })
-    });
-
-    const confirmationResult = await confirmation.json();
-
-    if (!confirmation.ok) {
-      console.error("Customer confirmation email error:", confirmationResult);
-
-      // The owner's order was successfully received, so don't
-      // reject the order just because the customer confirmation failed.
     }
 
     return res.status(200).json({

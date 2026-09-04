@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta content="width=device-width,initial-scale=1">
 <title>Lab²Table — Supplements</title>
 <style>
 *{box-sizing:border-box}
@@ -423,30 +423,47 @@ iframe{
 </style>
 
 
-<style id="lab2table-tawk-mobile-fix">
+
+
+
+<style id="lab2table-tawk-final-fix">
+
+/* =========================================================
+   TAWK / CART COLLISION FIX
+   Keep the floating Tawk launcher out of the cart button.
+   ========================================================= */
+
+/* Desktop: keep the cart fully accessible */
+.mobile-cart-bar{
+  position:fixed !important;
+  right:150px !important;
+  left:12px !important;
+  z-index:1500 !important;
+}
+
+/* Mobile: leave a generous lane for the Tawk launcher */
 @media(max-width:700px){
-
-  /* Give the Tawk bubble its own vertical lane above the cart */
-  #tawkchat-minified-box,
-  .tawk-min-container,
-  [class*="tawk-min"]{
-    bottom:82px !important;
-    right:12px !important;
-    z-index:1700 !important;
-  }
-
-  /* Keep the cart below it */
   .mobile-cart-bar{
+    left:10px !important;
+    right:95px !important;
     bottom:10px !important;
     z-index:1500 !important;
   }
 
-  /* Never let the chat widget create horizontal overflow */
-  iframe[title*="chat"],
-  iframe[src*="tawk"]{
-    max-width:100vw !important;
+  .mobile-cart-bar button{
+    flex:0 0 auto !important;
+    white-space:nowrap !important;
   }
 }
+
+/* Tawk itself stays above the page but no longer blocks the cart */
+#tawkchat-minified-box,
+.tawk-min-container,
+iframe[title*="Tawk"],
+iframe[src*="tawk.to"]{
+  z-index:1600 !important;
+}
+
 </style>
 
 </head>
@@ -601,8 +618,7 @@ iframe{
     
 <div style="margin-top:12px">
 <label>Referral Code (optional)</label>
-<input
- name="referral"
+<input name="referral"
  placeholder="Friend referral code"
 />
 </div>
@@ -620,7 +636,6 @@ iframe{
 
   <input
     id="giftCard"
-    name="giftCard"
     type="text"
     placeholder="Enter gift card code"
     autocomplete="off"
@@ -681,8 +696,7 @@ iframe{
 
 <script>
 const products=[
-{
- name:"Molly's Dancing Shoes",cat:"Hot New Products",emoji:"💃",
+{cat:"Hot New Products",emoji:"💃",
  tag:"Find your rhythm.",
  tiers:[
   ["Single Serve",1,75],
@@ -690,8 +704,7 @@ const products=[
   ["10 Servings",10,700],
   ["Daily Supply",30,2025]]
 },
-{
- name:"Dimitri's Blend",cat:"Hot New Products",emoji:"🧪",
+{cat:"Hot New Products",emoji:"🧪",
  tag:"A premium Lab²Table blend.",
  tiers:[
   ["Single Serve",1,75],
@@ -699,16 +712,14 @@ const products=[
   ["5 Servings",5,350],
   ["10 Servings",10,700]]
 },
-{
- name:"Chill Pills",cat:"Hot New Products",emoji:"💊",
+{cat:"Hot New Products",emoji:"💊",
  tag:"A Lab²Table wellness supplement.",
  tiers:[
   ["Single Serve",1,7],
   ["Trial Pack",3,21],
   ["10 Servings",10,65]]
 },
-{
- name:"Clear Energy",cat:"Energy",emoji:"⚡",
+{cat:"Energy",emoji:"⚡",
  tag:"Clear energy. Sharp direction.",
  tiers:[
   ["Single Serve",1,25],
@@ -718,8 +729,7 @@ const products=[
   ["Bulk Supply",60,540],
   ["One Pound Supply",0,1500]]
 },
-{
- name:"White Energy",cat:"Energy",emoji:"🌩️",
+{cat:"Energy",emoji:"🌩️",
  tag:"Turn it up.",
  tiers:[
   ["Single Serve",1,65],
@@ -727,8 +737,7 @@ const products=[
   ["10 Servings",10,400],
   ["Daily Supply",30,900]]
 },
-{
- name:"Focus Fixer",cat:"Focus",emoji:"🧠",
+{cat:"Focus",emoji:"🧠",
  tag:"Lock in.",
  tiers:[
   ["Single Serve",1,10],
@@ -737,8 +746,7 @@ const products=[
   ["Daily Supply",30,255],
   ["Bulk Supply",60,480]]
 },
-{
- name:"Horse Health",cat:"Wellness",emoji:"🐴",
+{cat:"Wellness",emoji:"🐴",
  tag:"A little horsepower.",
  tiers:[
   ["Single Serve",1,40],
@@ -852,7 +860,7 @@ const PROMOS = {
 };
 
 function productByName(name){
-  return products.find(p => p.name === name);
+  return products.find(p => p. name);
 }
 
 function addToCart(pi){
@@ -860,14 +868,13 @@ function addToCart(pi){
   const tier = product.tiers[0];
 
   const existing = cart.find(x =>
-    x.name === product.name && x.tierIndex === 0
+    x. product.name && x.tierIndex === 0
   );
 
   if(existing){
     existing.qty++;
   }else{
     cart.push({
-      name: product.name,
       tierIndex: 0,
       qty: 1
     });
@@ -878,7 +885,7 @@ function addToCart(pi){
 }
 
 function changeCartTier(name, tierIndex){
-  const item = cart.find(x => x.name === name);
+  const item = cart.find(x => x. name);
   if(item){
     item.tierIndex = Number(tierIndex);
     updateCart();
@@ -1035,7 +1042,6 @@ async function submitOrder(event){
     const tier = p.tiers[item.tierIndex];
 
     return {
-      name: p.name,
       tier: tier[0],
       price: Number(tier[2]),
       qty: Number(item.qty)
@@ -1053,7 +1059,7 @@ async function submitOrder(event){
       city: data.get("city"),
       state: data.get("state"),
       zip: data.get("zip"),
-      phone: data.get("phone")
+      phone: data.get("phone"),
     },
     items,
     promo: activePromo,
@@ -1091,7 +1097,7 @@ async function submitOrder(event){
           Order #${result.orderNumber || orderNumber}
         </strong>
         <p style="margin:12px 0 0">
-          We'll contact you at the phone number you provided to confirm delivery.
+          We'll contact you at the phone number you provided.
         </p>
         <p style="margin:12px 0 0">
           We'll contact you to confirm delivery.
